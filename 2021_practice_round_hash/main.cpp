@@ -7,9 +7,6 @@ using namespace std;
 // format	(filename, arrayPointer, lines to go through the file)
 void loadPizzasIntoArray(string, string[], int);
 // organize the array from biggest to smallest
-// sortArrayDescend goes with merge function
-void sortArrayDescend(string[], int, int);
-void merge(string[], int, int, int);
 void bub_sort(string[], int);
 
 
@@ -48,53 +45,6 @@ void loadPizzasIntoArray(string fileName, string pizzas[], int size) {
 	//sortArrayDescend(pizzas, 0, size);
 	bub_sort(pizzas, size);
 	read.close();
-}
-
-// MERGE SORT NOT WORKING. F THIS
-void merge(string arr[], int l, int m, int r) {
-	int i = l;
-	int j = m + l;
-	int k = l;
-
-	int size = (r - 1) + 1;
-	string *temp = new string[size];
-
-	while (i <= m && j <= r) {
-		if (arr[i] <= arr[j]) {
-			temp[k] = arr[i];
-			i++;
-			k++;
-		}
-		else {
-			temp[k] = arr[j];
-			j++;
-			k++;
-		}
-	}
-
-	while (i <= m) {
-		temp[k] = arr[i];
-		i++;
-		k++;
-	}
-	while (j <= r) {
-		temp[k] = arr[j];
-		j++;
-		k++;
-	}
-	for (int t = l; t <= r + 1; t++) {
-		arr[t] = temp[t];
-	}
-}
-// MERGE SORT NOT WORKING
-void sortArrayDescend(string pizzas[], int l, int r) {
-	if (l < r) {
-		int m = (1 + r) / 2;
-		sortArrayDescend(pizzas, l, m);
-		sortArrayDescend(pizzas, m+1, r);
-		merge(pizzas, l, m, r);
-
-	}
 }
 
 void bub_sort(string arr[], int size) {
