@@ -11,7 +11,8 @@ void loadPizzasIntoArray(string, string[], int);
 void sortArrayDescend(string[], int, int);
 void merge(string[], int, int, int);
 void bub_sort(string[], int);
-
+// create submission file
+void createSubmissionFile(string, string[], int);
 
 int main() {
 	int numPizza = -1;
@@ -29,11 +30,23 @@ int main() {
 
 	loadPizzasIntoArray("b_little_bit_of_everything.in", pizza, numPizza);
 
+
+	// create submission file
+	createSubmissionFile("submission.txt", pizza, numPizza);
 	// --DELETE AFTER-- check if loading array worked
 	for (int i = 0; i < numPizza; i++) {
 		cout << pizza[i] << endl;
 	}
 	return 0;
+}
+
+void createSubmissionFile(string fileName, string pizzas[], int sizeDeliver) {
+	ofstream write;
+
+	write.open(fileName);
+	write << sizeDeliver << endl;
+	write.close();
+
 }
 
 void loadPizzasIntoArray(string fileName, string pizzas[], int size) {
