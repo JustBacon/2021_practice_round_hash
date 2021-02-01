@@ -1,23 +1,20 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 using namespace std;
 
 // loading all each pizza lines into array
 // format	(filename, arrayPointer, lines to go through the file)
-void loadPizzasIntoArray(string, string[], int);
-// organize the array from biggest to smallest
-// sortArrayDescend goes with merge function
-void sortArrayDescend(string[], int, int);
-void merge(string[], int, int, int);
-void bub_sort(string[], int);
+void loadPizzasIntoArray(string, vector<string>&, int);
+// sorting string array descending order
+void bub_sort(vector<string>&, int);
 // create submission file
-void createSubmissionFile(string, string[], int);
+void createSubmissionFile(string, vector<string>&, int);
 
 int main() {
 	int numPizza = -1;
 	string string1;
-	bool is_eof = true;
 	ifstream read;
 
 	// Gets the number of pizza from the file
@@ -26,10 +23,10 @@ int main() {
 	numPizza = stoi(string1);
 	read.close();
 	
-	string *pizza = new string[numPizza];
+	vector<string> pizza;
+	pizza.resize(numPizza);
 
 	loadPizzasIntoArray("b_little_bit_of_everything.in", pizza, numPizza);
-
 
 	// create submission file
 	createSubmissionFile("submission.txt", pizza, numPizza);
@@ -40,7 +37,7 @@ int main() {
 	return 0;
 }
 
-void createSubmissionFile(string fileName, string pizzas[], int sizeDeliver) {
+void createSubmissionFile(string fileName, vector<string>& pizzas, int sizeDeliver) {
 	ofstream write;
 
 	write.open(fileName);
@@ -49,13 +46,13 @@ void createSubmissionFile(string fileName, string pizzas[], int sizeDeliver) {
 
 }
 
-void loadPizzasIntoArray(string fileName, string pizzas[], int size) {
+void loadPizzasIntoArray(string fileName, vector<string>& pizzas, int size) {
 	cout << "Loading array..." << endl;
 	ifstream read;
 
 	read.open(fileName);
 	getline(read, pizzas[0]);
-	for (int currentpizza = 0; currentpizza < size; currentpizza++) {
+	for (unsigned int currentpizza = 0; currentpizza < size; currentpizza++) {
 		getline(read, pizzas[currentpizza]);
 	}
 	//sortArrayDescend(pizzas, 0, size);
@@ -63,54 +60,7 @@ void loadPizzasIntoArray(string fileName, string pizzas[], int size) {
 	read.close();
 }
 
-// MERGE SORT NOT WORKING. F THIS
-void merge(string arr[], int l, int m, int r) {
-	int i = l;
-	int j = m + l;
-	int k = l;
-
-	int size = (r - 1) + 1;
-	string *temp = new string[size];
-
-	while (i <= m && j <= r) {
-		if (arr[i] <= arr[j]) {
-			temp[k] = arr[i];
-			i++;
-			k++;
-		}
-		else {
-			temp[k] = arr[j];
-			j++;
-			k++;
-		}
-	}
-
-	while (i <= m) {
-		temp[k] = arr[i];
-		i++;
-		k++;
-	}
-	while (j <= r) {
-		temp[k] = arr[j];
-		j++;
-		k++;
-	}
-	for (int t = l; t <= r + 1; t++) {
-		arr[t] = temp[t];
-	}
-}
-// MERGE SORT NOT WORKING
-void sortArrayDescend(string pizzas[], int l, int r) {
-	if (l < r) {
-		int m = (1 + r) / 2;
-		sortArrayDescend(pizzas, l, m);
-		sortArrayDescend(pizzas, m+1, r);
-		merge(pizzas, l, m, r);
-
-	}
-}
-
-void bub_sort(string arr[], int size) {
+void bub_sort(vector<string>& arr, int size) {
 	int* ingredientNum = new int[size];
 	for (int i = 0; i < size; i++) {
 		ingredientNum[i] = stoi(arr[i]);
