@@ -8,25 +8,30 @@ using namespace std;
 // format	(filename, arrayPointer, lines to go through the file)
 void loadPizzasIntoArray(string, vector<string>&, int);
 // sorting string array descending order
-void bub_sort(vector<string>&, int);
+void bubSortDescend(vector<string>&, int);
 // create submission file
 void createSubmissionFile(string, vector<string>&, int);
 
 int main() {
 	int numPizza = -1;
-	string string1;
 	ifstream read;
+	// number of person in a team
+	// t2 (2 person team)
+	int t2, t3, t4;
 
 	// Gets the number of pizza from the file
 	read.open("b_little_bit_of_everything.in");
-	read >> string1;
-	numPizza = stoi(string1);
+	read >> numPizza;
+	read >> t2 >> t3 >> t4;
 	read.close();
 	
-	vector<string> pizza;
-	pizza.resize(numPizza);
+	vector<string> pizza(numPizza);
 
 	loadPizzasIntoArray("b_little_bit_of_everything.in", pizza, numPizza);
+	// copy constructor copies everything from pizza vector
+	// use this to comapre and remove pizzas in vector
+	// keep the original to use for creating the submission file
+	vector<string> pizzaCopy(pizza);
 
 	// create submission file
 	createSubmissionFile("submission.txt", pizza, numPizza);
@@ -55,12 +60,16 @@ void loadPizzasIntoArray(string fileName, vector<string>& pizzas, int size) {
 	for (unsigned int currentpizza = 0; currentpizza < size; currentpizza++) {
 		getline(read, pizzas[currentpizza]);
 	}
-	//sortArrayDescend(pizzas, 0, size);
-	bub_sort(pizzas, size);
+	//Sort vector list in descending order.
+	// Might not need to sort because the submission file
+	// need the specific pizza
+	// example. (A 2-person team will receive pizza 1 and pizza 4)
+	// need to track the pizza so do not sort
+	//bubSortDescend(pizzas, size);
 	read.close();
 }
 
-void bub_sort(vector<string>& arr, int size) {
+void bubSortDescend(vector<string>& arr, int size) {
 	int* ingredientNum = new int[size];
 	for (int i = 0; i < size; i++) {
 		ingredientNum[i] = stoi(arr[i]);
