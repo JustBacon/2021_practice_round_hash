@@ -21,14 +21,14 @@ int main() {
 	int t2, t3, t4;
 
 	// Gets the number of pizza from the file
-	read.open("b_little_bit_of_everything.in");
+	read.open("a_example");
 	read >> numPizza;
 	read >> t2 >> t3 >> t4;
 	read.close();
 	
 	vector<string> pizza(numPizza);
 
-	loadPizzasIntoArray("b_little_bit_of_everything.in", pizza, numPizza);
+	loadPizzasIntoArray("a_example", pizza, numPizza);
 	// copy constructor copies everything from pizza vector
 	// use this to comapre and remove pizzas in vector
 	// keep the original to use for creating the submission file
@@ -38,7 +38,7 @@ int main() {
 	createSubmissionFile("submission.txt", pizza, numPizza);
 	// --DELETE AFTER-- check if loading array worked
 	for (int i = 0; i < numPizza; i++) {
-		cout << pizza[i] << endl;
+		//cout << pizza[i] << endl;
 	}
 	return 0;
 }
@@ -59,10 +59,12 @@ void loadPizzasIntoArray(string fileName, vector<string>& pizzas, int size) {
 	vector<string> allIngreds, lineIngreds;
 	string currentLine;
 	string tmp;
+	int deleteNum;
 
 	read.open(fileName);
-	getline(read, pizzas[0]);
+	getline(read, pizzas[0]); // skips the 1st line in the file
 	for (unsigned int currentpizza = 0; currentpizza < size; currentpizza++) {
+		read >> deleteNum;
 		getline(read, pizzas[currentpizza]);
 		//TODO: SPLIT STRING INTO lineIngreds Vector/Array?
 		string tmp;
@@ -75,14 +77,14 @@ void loadPizzasIntoArray(string fileName, vector<string>& pizzas, int size) {
 		//cout << lineIngreds.size() << endl;
 
 		for (int j = 0; j < lineIngreds.size(); j++) {
-			lineIngreds[j];
-			if (std::find(allIngreds.begin(), allIngreds.end(), lineIngreds[j]) != allIngreds.end()) {
+			
+			if (find(allIngreds.begin(), allIngreds.end(), lineIngreds[j]) != allIngreds.end()) {
 				/* v contains x */
 			}
 			else {
 				/* v does not contain x */
 				allIngreds.push_back(lineIngreds[j]);
-				cout << lineIngreds[j] << endl;
+				//cout << lineIngreds[j] << endl;
 			}
 		}
 		//SORTING SHIT IDK??
@@ -93,33 +95,8 @@ void loadPizzasIntoArray(string fileName, vector<string>& pizzas, int size) {
 	read.close();
 }
 
+
 void bubSortDescend(vector<string>& arr, int size) {
-	while (i <= m) {
-		temp[k] = arr[i];
-		i++;
-		k++;
-	}
-	while (j <= r) {
-		temp[k] = arr[j];
-		j++;
-		k++;
-	}
-	for (int t = l; t <= r + 1; t++) {
-		arr[t] = temp[t];
-	}
-}
-// MERGE SORT NOT WORKING
-void sortArrayDescend(string pizzas[], int l, int r) {
-	if (l < r) {
-		int m = (1 + r) / 2;
-		sortArrayDescend(pizzas, l, m);
-		sortArrayDescend(pizzas, m+1, r);
-		merge(pizzas, l, m, r);
-
-	}
-}
-
-void bub_sort(string arr[], int size) {
 	int* ingredientNum = new int[size];
 	for (int i = 0; i < size; i++) {
 		ingredientNum[i] = stoi(arr[i]);
