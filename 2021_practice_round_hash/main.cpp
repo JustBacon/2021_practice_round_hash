@@ -19,21 +19,18 @@ int main() {
 	ifstream read;
 
 	// Gets the number of pizza from the file
-	read.open("c_many_ingredients.in");
+	read.open("a_example");
 	read >> string1;
 	numPizza = stoi(string1);
 	read.close();
 	
 	string *pizza = new string[numPizza];
 
-	loadPizzasIntoArray("b_little_bit_of_everything.in", pizza, numPizza);
+	loadPizzasIntoArray("a_example", pizza, numPizza);
 
-	loadPizzasIntoArray("c_many_ingredients.in", pizza, NUM_OF_PIZZA);
-	/*/ --DELETE AFTER-- check if loading array worked
-	for (int i = 0; i < NUM_OF_PIZZA; i++) {
-		cout << pizza[i] << endl;
-	}
-	return 0;/*/
+	//loadPizzasIntoArray("c_many_ingredients.in", pizza, numPizza);
+	
+	return 0;
 }
 
 void loadPizzasIntoArray(string fileName, string pizzas[], int size) {
