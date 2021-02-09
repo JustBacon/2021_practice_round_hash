@@ -172,6 +172,7 @@ void comparePizza(vector<string>& pizzas, vector<string>& unique, int t2, int t3
 		}
 		cout << ingred_total << endl;
 
+
 		word.clear();
 	}
 }
