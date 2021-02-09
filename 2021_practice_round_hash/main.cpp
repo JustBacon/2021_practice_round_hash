@@ -7,11 +7,14 @@ using namespace std;
 
 // loading all each pizza lines into array
 // format	(filename, arrayPointer, lines to go through the file)
-void loadPizzasIntoArray(string, vector<string>&, int);
+void loadPizzasIntoArray(string, vector<string>&, vector<string>&, int);
 // sorting string array descending order
 void bubSortDescend(vector<string>&, int);
 // create submission file
 void createSubmissionFile(string, vector<string>&, int);
+// compare pizzas with unique ingredients
+// Put (line ingredients, unique word for word ingredients, team of 2, team of 3, team of 4
+void comparePizza(vector<string>&, vector<string>&, int, int, int);
 
 int main() {
 	int numPizza = -1;
@@ -27,18 +30,22 @@ int main() {
 	read.close();
 	
 	vector<string> pizza(numPizza);
+	vector<string> ingred;
 
-	loadPizzasIntoArray("a_example", pizza, numPizza);
+	loadPizzasIntoArray("a_example", pizza, ingred, numPizza);
 	// copy constructor copies everything from pizza vector
 	// use this to comapre and remove pizzas in vector
 	// keep the original to use for creating the submission file
 	vector<string> pizzaCopy(pizza);
+	comparePizza(pizzaCopy, ingred, t2, t3, t4);
 
 	// create submission file
 	createSubmissionFile("submission.txt", pizza, numPizza);
 	// --DELETE AFTER-- check if loading array worked
+	cout << endl;
+	cout << "All the pizzas:" << endl;
 	for (int i = 0; i < numPizza; i++) {
-		//cout << pizza[i] << endl;
+		cout << pizza[i] << endl;
 	}
 	return 0;
 }
@@ -52,11 +59,11 @@ void createSubmissionFile(string fileName, vector<string>& pizzas, int sizeDeliv
 
 }
 
-void loadPizzasIntoArray(string fileName, vector<string>& pizzas, int size) {
+void loadPizzasIntoArray(string fileName, vector<string>& pizzas, vector<string>& allIngreds, int size) {
 	cout << "Loading array..." << endl;
 	ifstream read;
 
-	vector<string> allIngreds, lineIngreds;
+	vector<string> lineIngreds;
 	string currentLine;
 	string tmp;
 	int deleteNum;
@@ -66,6 +73,9 @@ void loadPizzasIntoArray(string fileName, vector<string>& pizzas, int size) {
 	for (unsigned int currentpizza = 0; currentpizza < size; currentpizza++) {
 		read >> deleteNum;
 		getline(read, pizzas[currentpizza]);
+		istringstream iss(pizzas[currentpizza]);
+		iss >> ws;
+		getline(iss, pizzas[currentpizza]);
 		//TODO: SPLIT STRING INTO lineIngreds Vector/Array?
 		string tmp;
 		stringstream ss(pizzas[currentpizza]);
@@ -89,6 +99,7 @@ void loadPizzasIntoArray(string fileName, vector<string>& pizzas, int size) {
 		}
 		//SORTING SHIT IDK??
 	}
+	cout << "This is all the unique ingredients:" << endl;
 	for (int i = 0; i < allIngreds.size(); i++) {
 		cout << allIngreds[i] << endl;
 	}
@@ -127,4 +138,40 @@ void bubSortDescend(vector<string>& arr, int size) {
 		}
 	} while (swap);
 
+}
+
+void comparePizza(vector<string>& pizzas, vector<string>& unique, int t2, int t3, int t4) {
+	int pizza_size, unique_size;
+	pizza_size = pizzas.size();
+	unique_size = unique.size();
+
+	int ingred_total = 0;
+
+	vector<string> uniqueCopy(unique);
+	// pizzas is still has all the ingredients with spaces.
+	// unique has individual words.
+	// comparing word for word
+	vector<string> word;
+	string temp;
+
+	for (unsigned int currentIngred = 0; currentIngred < pizza_size; currentIngred++) {
+		stringstream ss(pizzas[currentIngred]);
+		while (ss >> temp) {
+			word.push_back(temp);
+		}
+		int size_p = word.size();
+		int size_i = uniqueCopy.size();
+		// TODO: compare pizzas with unique ingreds.
+		for (int i = 0; i < size_p; i++) {
+			for (int j = 0; j < size_i; j++) {
+				if (word[i] == uniqueCopy[j]) {
+					uniqueCopy[j].erase();
+					ingred_total++;
+				}
+			}
+		}
+		cout << ingred_total << endl;
+
+		word.clear();
+	}
 }
