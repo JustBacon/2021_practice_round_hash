@@ -14,8 +14,8 @@ void bubSortDescend(vector<string>&, int);
 void createSubmissionFile(string, vector<string>&, int);
 // compare pizzas with unique ingredients
 // Put (line ingredients, unique word for word ingredients, team of 2, team of 3, team of 4
-string comparePizza(vector<string>&, vector<string>&, unsigned int);
-int getLowestIngredPizza(vector<string>&);
+string comparePizza(vector<string>&, vector<string>&, unsigned int, string);
+int getLowestIngredPizza(vector<string>&, string);
 
 
 int main() {
@@ -24,7 +24,7 @@ int main() {
 	// number of person in a team
 	// t2 (2 person team)
 	int t2, t3, t4;
-	string fileName = "b_little_bit_of_everything.in";
+	string fileName = "a_example";
 
 	// Gets the number of pizza from the file
 	read.open(fileName);
@@ -35,33 +35,36 @@ int main() {
 	vector<string> pizza(numPizza);
 	vector<string> ingred;
 
+	cout << "LOAD:\n";
 	loadPizzasIntoArray(fileName, pizza, ingred, numPizza);
+	cout << "DONE LOADING:\n";
 	// copy constructor copies everything from pizza vector
 	// use this to comapre and remove pizzas in vector
 	// keep the original to use for creating the submission file
 	
 	vector<string> stringSubmission;
 	//cout << "teams of 4\n";
-	stringSubmission.push_back("4");
 	for (int i = 0; i < t4; i++) {
-		//cout << "i: " << i << endl;
-		stringSubmission.push_back(comparePizza(pizza, ingred, 4));
+		stringSubmission.push_back(comparePizza(pizza, ingred, 4, fileName));
 	}
 
 	//cout << "teams of 3\n";
-	stringSubmission.push_back("3");
 	for (int i = 0; i < t3; i++) {
-		stringSubmission.push_back(comparePizza(pizza, ingred, 3));
+		stringSubmission.push_back(comparePizza(pizza, ingred, 3, fileName));
 	}
 
 	//cout << "teams of 2\n";
-	stringSubmission.push_back("2");
 	for (int i = 0; i < t3; i++) {
-		stringSubmission.push_back(comparePizza(pizza, ingred, 2));
+		stringSubmission.push_back(comparePizza(pizza, ingred, 2, fileName));
 	}
-
+	for (unsigned int i = 0; i < stringSubmission.size(); i++) {
+		if (stringSubmission[i] == "") {
+			stringSubmission.erase(stringSubmission.begin() + i, stringSubmission.end());
+		}
+	}
+	stringSubmission.insert(stringSubmission.begin(), to_string(stringSubmission.size()));
 	// create submission file
-	createSubmissionFile("submission.txt", stringSubmission, numPizza);
+	createSubmissionFile("submissionA.txt", stringSubmission, numPizza);
 	
 	return 0;
 }
@@ -88,6 +91,9 @@ void loadPizzasIntoArray(string fileName, vector<string>& pizzas, vector<string>
 	int deleteNum;
 
 	read.open(fileName);
+	if (!read) {
+		cout << "ERROR. CANT OPEN.\n\n\n";
+	}
 	getline(read, pizzas[0]); // skips the 1st line in the file
 	for (int currentpizza = 0; currentpizza < size; currentpizza++) {
 		read >> deleteNum;
@@ -103,7 +109,7 @@ void loadPizzasIntoArray(string fileName, vector<string>& pizzas, vector<string>
 		while (getline(ss, tmp, ' ')) {
 			lineIngreds.push_back(tmp);
 		}
-
+		cout << currentpizza << endl;
 		//cout << lineIngreds.size() << endl;
 
 		for (unsigned int j = 0; j < lineIngreds.size(); j++) {
@@ -162,10 +168,10 @@ void bubSortDescend(vector<string>& arr, int size) {
 
 }
 
-string comparePizza(vector<string>& pizzas, vector<string>& unique, unsigned int team_size) {
+string comparePizza(vector<string>& pizzas, vector<string>& unique, unsigned int team_size, string fileName) {
 	string line;
 	// check if we have enough pizzas
-	if (!pizzas.empty() || (pizzas.size() >= team_size) && pizzas.size() > 0) {
+	if (!pizzas.empty() && (pizzas.size() >= team_size) && pizzas.size() > 0) {
 		int unique_size;
 		unique_size = unique.size();
 
@@ -221,9 +227,9 @@ string comparePizza(vector<string>& pizzas, vector<string>& unique, unsigned int
 			if (team_size > 0 && uniqueCopy.empty()) {
 				team_size--;
 				//cout << "broken: ";
-				int lowIngredIndex = getLowestIngredPizza(pizzasCopy);
+				int lowIngredIndex = getLowestIngredPizza(pizzasCopy, fileName);
 				line += " " + pizzasCopy[lowIngredIndex].substr(0, pizzasCopy[lowIngredIndex].find(" "));
-				pizzasCopy.erase(pizzasCopy.begin() + currentIngred);
+				pizzasCopy.erase(pizzasCopy.begin() + lowIngredIndex);
 				pizzas.erase(pizzas.begin() + lowIngredIndex);
 
 			}
@@ -236,6 +242,7 @@ string comparePizza(vector<string>& pizzas, vector<string>& unique, unsigned int
 	else {
 		//line = "hmm: \n";
 		//cout << "No pizza left!\n";
+		line = "";
 	}
 	//cout << line << endl;
 	return line;
@@ -243,7 +250,7 @@ string comparePizza(vector<string>& pizzas, vector<string>& unique, unsigned int
 
 
 
-int getLowestIngredPizza(vector<string>& pizzas) {
+int getLowestIngredPizza(vector<string>& pizzas, string fileName) {
 	int pizzaIndex = 0;
 	int size = pizzas.size();
 	int fileSize;
@@ -260,7 +267,7 @@ int getLowestIngredPizza(vector<string>& pizzas) {
 	string deleteString;
 
 	ifstream read;
-	read.open("b_little_bit_of_everything.in");
+	read.open(fileName);
 	read >> fileSize;
 	vector<int> numArray;
 	numArray.resize(fileSize);

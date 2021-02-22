@@ -36,4 +36,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="submission.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="submissionA.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="submissionB.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
